@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import Header from './Header';
 import './Pomodoro.css'
-import Sound from './Sonido'
-import soundfile from '../Cuak.mp3'
-import Sonido from './Sonido';
+import Sound from 'react-sound'
 
 
 export class Pomodoro extends Component {
@@ -14,8 +12,8 @@ export class Pomodoro extends Component {
             running: false,
             intervalNumber: 1,
             message: 'Intervalo',
-            totalIntervalo:1500,
-            sound:true
+            totalIntervalo: 1500,
+            sound: false
         }
     }
 
@@ -43,18 +41,14 @@ export class Pomodoro extends Component {
         clearInterval(this.interval);
         this.setState({
             tiempo: 1500,
-            running: false,            
+            running: false,
             intervalNumber: 1,
             message: 'Intervalo',
-            totalIntervalo:1500,
-            sound:false
+            totalIntervalo: 1500,
+            sound: false
         })
     }
 
-    changeStates = () => {
-
-
-    }
     componentDidUpdate(prevProps, PrevState) {
         //console.log('timer', this.state.tiempo)
         const intervalType = this.state.message;
@@ -69,51 +63,53 @@ export class Pomodoro extends Component {
                     this.setState({
                         tiempo: 300,
                         message: 'Descanso corto',
-                        totalIntervalo:300,
-                        sound:true
+                        totalIntervalo: 300,
+                        sound: true
                     })
-                    //alert('terminó el intervalo '+intervalNmbr);
                 }
+
                 //caso del último intervalo antes de la pausa
                 if (intervalType === 'Intervalo' && intervalNmbr === 4) {
                     this.setState({
                         tiempo: 1200,
                         message: 'Descanso largo',
-                        totalIntervalo:1200,
-                        sound:true
+                        totalIntervalo: 1200,
+                        sound: true
                     });
-
-                    //alert('Pasea un rato');
                 }
+
                 //final de la pausa corta
                 if (intervalType === 'Descanso corto') {
                     this.setState({
                         tiempo: 1500,
                         message: 'Intervalo',
                         intervalNumber: this.state.intervalNumber + 1,
-                        totalIntervalo:1500,
-                        sound:false
+                        totalIntervalo: 1500,
+                        sound: false
                     })
-
-                    //alert('Vuelve a currar');
                 }
+
                 //final pausa larga
                 if (intervalType === 'Descanso largo') {
                     this.setState({
                         tiempo: 1500,
                         message: 'Intervalo',
                         intervalNumber: 1,
-                        totalIntervalo:1500,
-                        sound:false
+                        totalIntervalo: 1500,
+                        sound: false
                     })
-
-                    //alert('Empezamos todo de nuevo');
                 }
             }
         }
     }
+
+    handleSongFinishedPlaying = () => {
+        this.setState(
+            { sound: false }
+        )
+    }
+
     render() {
-        //console.log(this.state);
         return (
             <div className='ui center aligned container'>
                 <Header data={this.state} />
@@ -128,9 +124,15 @@ export class Pomodoro extends Component {
                         <i className='stop icon' />
                     </button>
                 </div>
-                <audio>
-                <source src={soundfile} type='audio/mpeg'></source>
-                </audio>
+                <div>
+                    {this.state.message ?
+                        <Sound url='/Cuak.mp3'
+                            playStatus={this.state.sound ? Sound.status.PLAYING : Sound.status.STOPPED}
+                            onFinishedPlaying={this.handleSongFinishedPlaying}
+                        /> : null
+                    }
+
+                </div>
             </div>
         )
     }
