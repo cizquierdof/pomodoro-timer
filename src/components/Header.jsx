@@ -6,7 +6,10 @@ const Header = (props) => {
 
     const Titulo = () => {
         return (
+            <div>
             <h1 className='ui red header'>THE <br /> POMODORO TIMER</h1>
+            <img className='ui small centered image' src='/timer.svg' alt='timer'/>
+            </div>
         )
     }
 
@@ -29,7 +32,7 @@ const Header = (props) => {
 
         return (
             <div className="ui active progress green">
-                <div className="bar" style={{ transitionDuration: '10ms', width: progreso + '%' }}>{`${progreso}%`}</div>
+                <div className="bar" style={{ transitionDuration: '100ms', width: progreso + '%' }}>{`${progreso}%`}</div>
             </div>
         )
     }
