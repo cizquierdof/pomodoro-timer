@@ -26,7 +26,7 @@ export class Pomodoro extends Component {
             () => this.setState({
                 tiempo: this.state.tiempo - 1,
                 running: true
-            }), 10
+            }), 100
         )
     }
 
